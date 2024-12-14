@@ -1,6 +1,6 @@
 import pygame
 import config
-
+import math
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -10,7 +10,6 @@ class Player(pygame.sprite.Sprite):
         self.image_source = pygame.image.load("static/images/car.png").convert()
         self.image = pygame.transform.scale(self.image_source,(self.width,self.height))
         self.image = pygame.transform.rotate(self.image, -self.forward_angle)
-
         self.image.set_colorkey("black")
 
         self.rect = self.image.get_rect()
@@ -21,6 +20,9 @@ class Player(pygame.sprite.Sprite):
         self.move_velocity_limit = 220  # 移动速度的上限
         self.move_velocity = 0  # 当前的移动速度
         self.move_acc = 600  # 每秒将速度增加600
+        self.rotate_velocity = 0  # 角速度
+        self.rotate_velocity_limit = 140  # 角速度上限
+
         self.friction = 0.9  # 摩擦力
 
 
@@ -41,9 +43,29 @@ class Player(pygame.sprite.Sprite):
             self.move_velocity = max(self.move_velocity, -self.move_velocity_limit)
         else:
             self.move_velocity = int(self.move_velocity * self.friction)
-    def move(self):
-        self.rect.x+= self.move_velocity * self.delta_time
 
+        if key_pressed[pygame.K_d]:
+            self.rotate_velocity = self.rotate_velocity_limit
+        elif key_pressed[pygame.K_a]:
+            self.rotate_velocity = -self.rotate_velocity_limit
+
+    def rotate(self):
+        self.forward_angle += self.rotate_velocity*self.delta_time
+        self.image = pygame.transform.scale(self.image_source, (self.width, self.height))
+        self.image = pygame.transform.rotate(self.image, -self.forward_angle)
+        self.image.set_colorkey("black")
+        #更新中心点位置
+        #使转动中心变为中心点
+        center = self.rect.center
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+    def move(self):
+        if self.move_velocity!=0:
+            self.rotate()# 只有车在前进或后退时，车身角度才会变化；原地不动打方向班，车身角度是不变的
+            vx = self.move_velocity * math.cos(math.pi*self.forward_angle/180)
+            vy = self.move_velocity * math.sin(math.pi*self.forward_angle/180)
+            self.rect.x += vx * self.delta_time
+            self.rect.y += vy * self.delta_time
 
     def update(self):
         self.update_delta_time()
