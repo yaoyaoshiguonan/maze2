@@ -2,18 +2,18 @@ import pygame
 import config
 import math
 class Player(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, center_x, center_y, forward_angle):
         super().__init__()
         self.width = 100
         self.height = 50
-        self.forward_angle = 30 # 在游戏坐标系中，顺时针转动的角度
+        self.forward_angle = forward_angle # 在游戏坐标系中，顺时针转动的角度
         self.image_source = pygame.image.load("static/images/car.png").convert()
         self.image = pygame.transform.scale(self.image_source,(self.width,self.height))
         self.image = pygame.transform.rotate(self.image, -self.forward_angle)
         self.image.set_colorkey("black")
 
         self.rect = self.image.get_rect()
-        self.rect.center = (config.SCREEN_WIDTH/2,config.SCREEN_HEIGHT/2)
+        self.rect.center = (center_x, center_y)
         self.last_time = pygame.time.get_ticks()#返回当前时刻
         self.delta_time = 0 #相邻两帧之间时间间隔
 
@@ -27,7 +27,9 @@ class Player(pygame.sprite.Sprite):
         self.crash_sound = pygame.mixer.Sound("static/sounds/crash.mp3")
         self.crash_sound.set_volume(0.1)
 
-
+        self.move_sound = pygame.mixer.Sound("static/sounds/move.mp3")
+        self.move_sound.set_volume(0.2)
+        self.move_voice_channel = pygame.mixer.Channel(7)
 
     def update_delta_time(self):
         cur_time = pygame.time.get_ticks()

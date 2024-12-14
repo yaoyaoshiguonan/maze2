@@ -6,7 +6,7 @@ from utils.collided import collided_rect, collided_circle
 class GameManager:
     def __init__(self,screen,level):
         self.screen = screen
-        self.player = Player()
+        self.player = None
         self.level = level
         self.walls = pygame.sprite.Group()
         wall = Wall(200,200,500,5)
@@ -17,6 +17,11 @@ class GameManager:
         for x, y, width, height in walls:
             wall = Wall(x, y, width, height)
             wall.add(self.walls)
+
+    def load_player(self, center_x, center_y, forward_angle):
+        if self.player:
+            self.player.kill()
+        self.player = Player(center_x, center_y, forward_angle)
 
     def load(self):  # 加载当前这一关的地图信息
         with open("static/maps/level%d.txt" % self.level, 'r') as fin:
