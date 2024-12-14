@@ -43,11 +43,15 @@ class Player(pygame.sprite.Sprite):
             self.move_velocity = max(self.move_velocity, -self.move_velocity_limit)
         else:
             self.move_velocity = int(self.move_velocity * self.friction)
-
+        sign = 1
+        if self.move_velocity < 0:
+            sign = -1
         if key_pressed[pygame.K_d]:
-            self.rotate_velocity = self.rotate_velocity_limit
+            self.rotate_velocity = self.rotate_velocity_limit*sign
         elif key_pressed[pygame.K_a]:
-            self.rotate_velocity = -self.rotate_velocity_limit
+            self.rotate_velocity = -self.rotate_velocity_limit*sign
+        else:
+            self.rotate_velocity = 0
 
     def rotate(self):
         self.forward_angle += self.rotate_velocity*self.delta_time
@@ -59,8 +63,9 @@ class Player(pygame.sprite.Sprite):
         center = self.rect.center
         self.rect = self.image.get_rect()
         self.rect.center = center
+
     def move(self):
-        if self.move_velocity!=0:
+        if abs(self.move_velocity) > 50:
             self.rotate()# 只有车在前进或后退时，车身角度才会变化；原地不动打方向班，车身角度是不变的
             vx = self.move_velocity * math.cos(math.pi*self.forward_angle/180)
             vy = self.move_velocity * math.sin(math.pi*self.forward_angle/180)
