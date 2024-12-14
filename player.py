@@ -24,6 +24,8 @@ class Player(pygame.sprite.Sprite):
         self.rotate_velocity_limit = 140  # 角速度上限
 
         self.friction = 0.9  # 摩擦力
+        self.crash_sound = pygame.mixer.Sound("static/sounds/crash.mp3")
+        self.crash_sound.set_volume(0.1)
 
 
 
@@ -75,6 +77,8 @@ class Player(pygame.sprite.Sprite):
             self.rotate(direction)
 
     def crash(self):#撞墙了
+        self.crash_sound.play()
+
         self.move(-1)#退
         if self.move_velocity >= 0:
             self.move_velocity = min(-self.move_velocity, -100)
