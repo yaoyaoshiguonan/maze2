@@ -1,7 +1,5 @@
 import pygame
 
-
-
 def collided_rect(a,b):
     p = []
     for i, j in [(1, -1), (1, 1), (-1, 1), (-1, -1)]:#先存下四个点

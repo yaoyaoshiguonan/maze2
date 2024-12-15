@@ -41,11 +41,17 @@ class Player(pygame.sprite.Sprite):
         if key_pressed[pygame.K_w]:
             self.move_velocity += self.move_acc * self.delta_time
             self.move_velocity = min(self.move_velocity_limit, self.move_velocity)
+            if not self.move_voice_channel.get_busy():
+                self.move_voice_channel.play(self.move_sound)
         elif key_pressed[pygame.K_s]:
             self.move_velocity -= self.move_acc * self.delta_time
             self.move_velocity = max(self.move_velocity, -self.move_velocity_limit)
+            if not self.move_voice_channel.get_busy():
+                self.move_voice_channel.play(self.move_sound)
         else:
             self.move_velocity = int(self.move_velocity * self.friction)
+            if self.move_voice_channel.get_busy():
+                self.move_voice_channel.stop()
         sign = 1
         if self.move_velocity < 0:
             sign = -1
