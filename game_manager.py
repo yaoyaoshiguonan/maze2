@@ -64,6 +64,9 @@ class GameManager:
                 x, y = map(int, fin.readline().split())
                 targets.append((x, y))
             self.load_targets(targets)
+            center_x, center_y, forward_angle = map(int, fin.readline().split())
+            self.load_player(center_x, center_y, forward_angle)
+
 
     def next_level(self):
         self.level += 1
@@ -90,9 +93,11 @@ class GameManager:
         self.stars.draw(self.screen)
         self.targets.update()
         self.targets.draw(self.screen)
+
         self.player.update()
         success = self.check_collide()
         self.screen.blit(self.player.image, self.player.rect)
+
         self.walls.update()
         self.walls.draw(self.screen)
         return success  # 返回是否获胜
