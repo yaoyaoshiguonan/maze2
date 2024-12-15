@@ -14,9 +14,9 @@ class Star(pygame.sprite.Sprite):
 
     def update(self):
         self.scale += self.scale_delta
-        if self.scale > 1.1 or self.scale < 0.9:#使它放大缩小
+        if self.scale > 1.1 or self.scale < 0.9:
             self.scale_delta = -self.scale_delta
-        self.image = pygame.transform.scale(self.image_source, (50 * self.scale, 50 * self.scale))#使它以中心点变化
+        self.image = pygame.transform.scale(self.image_source, (50 * self.scale, 50 * self.scale))
         center = self.rect.center
         self.rect = self.image.get_rect()
         self.rect.center = center
