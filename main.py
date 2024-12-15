@@ -7,7 +7,7 @@ from utils.draw_text import draw_text
 pygame.init()
 pygame.mixer.init()  # 初始化声音
 
-screen = pygame.display.set_mode((config.SCREEN_WIDTH,config.SCREEN_WIDTH))
+screen = pygame.display.set_mode((config.SCREEN_WIDTH,config.SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
 ico = pygame.image.load("static/images/maze.png").convert()
